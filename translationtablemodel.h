@@ -16,6 +16,12 @@ struct TranslElem
     QString     _object_name_;
     QString     _class_name_;
     QMap<QString,QString> _translations_;
+    TranslElem(){}
+    TranslElem(const TranslElem& other);
+    TranslElem(TranslElem&& other);
+    bool operator==(const TranslElem& other);
+    bool operator!=(const TranslElem& other);
+
 };
 
 class TranslationTableModel:public QAbstractItemModel
@@ -27,6 +33,7 @@ private:
     bool checkIndex(const QModelIndex& index) const;
     int getLangDataRow(const QModelIndex& index) const;
     int getLangDataCol(const QModelIndex& index) const;
+    void changeLangName(const QString& old_name, const QString& new_name = QString());
 public:
     TranslationTableModel(QObject * tata = nullptr);
     QVariant data(const QModelIndex& index, int role) const override;
@@ -37,7 +44,9 @@ public:
     Qt::ItemFlags flags(const QModelIndex& index) const override;
     bool insertColumns(int column, int count, const QModelIndex &parent) override;
     bool removeColumns(int column, int count, const QModelIndex& parent) override;
-    bool removeRows(int row, int count, const QModelIndex& parent) override;
+    const QList<TranslElem>& getElements() const;
+    const QList<QString>& getLanguages() const;
+    bool loadElements(QList<TranslElem> &elements, QList<QString> &languages);
 };
 
 #endif // TRANSLATIONTABLEMODEL_H
