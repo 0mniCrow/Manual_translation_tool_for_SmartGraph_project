@@ -22,8 +22,6 @@ HEADERS += \
 FORMS += \
     mainwindow.ui
 
-TRANSLATIONS += \
-    Translation_Tool_be_BY.ts
 CONFIG += lrelease
 CONFIG += embed_translations
 

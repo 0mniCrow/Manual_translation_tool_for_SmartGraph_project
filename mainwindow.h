@@ -2,6 +2,8 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QFileDialog>
+#include "translationxmlparser.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -14,8 +16,13 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
-
+private slots:
+    void addColumn();
+    void removeColumn();
+    void loadProject();
+    void saveProject();
 private:
+    TranslationTableModel* _model_;
     Ui::MainWindow *ui;
 };
 #endif // MAINWINDOW_H

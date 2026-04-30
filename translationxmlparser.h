@@ -6,6 +6,7 @@
 #include <QDomNode>
 #include <QDomText>
 #include <QFile>
+#include <QSet>
 
 class TranslationXMLParser
 {
@@ -17,10 +18,12 @@ public:
     TranslationXMLParser();
     static bool loadProject(const QString& file_addr,
                             QList<TranslElem>& elements,
-                            QList<QString>& languages);
+                            QList<QString>& languages,
+                            QSet<QString>& windows);
     static bool saveProject(const QString& file_addr,
                             const QList<TranslElem>& elements,
-                            const QList<QString>& languages);
+                            const QList<QString>& languages,
+                            const QSet<QString>& windows);
 };
 
 #endif // TRANSLATIONXMLPARSER_H

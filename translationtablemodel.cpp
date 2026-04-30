@@ -5,6 +5,7 @@
 TranslElem::TranslElem(const TranslElem& other):
     _object_name_(other._object_name_),
     _class_name_(other._class_name_),
+    _window_name_(other._window_name_),
     _translations_(other._translations_)
 {
 //    std::copy(other._translations_.cbegin(),
@@ -16,6 +17,7 @@ TranslElem::TranslElem(const TranslElem& other):
 TranslElem::TranslElem(TranslElem&& other):
     _object_name_(std::move(other._object_name_)),
     _class_name_(std::move(other._class_name_)),
+    _window_name_(std::move(other._window_name_)),
     _translations_(std::move(other._translations_))
 {
 //    _object_name_ = std::move(other._object_name_);
@@ -23,6 +25,25 @@ TranslElem::TranslElem(TranslElem&& other):
 //    _translations_ =std::move(other._translations_);
     return;
 }
+TranslElem& TranslElem::operator=(const TranslElem& other)
+{
+    _object_name_=(other._object_name_);
+    _class_name_=(other._class_name_);
+    _window_name_=(other._window_name_);
+    _translations_=(other._translations_);
+    _translations_.detach();
+    return *this;
+}
+
+TranslElem& TranslElem::operator=(TranslElem&& other)
+{
+    _object_name_ = std::move(other._object_name_);
+    _class_name_ = std::move(other._class_name_);
+    _window_name_ = std::move(other._window_name_);
+    _translations_ = std::move(other._translations_);
+    return *this;
+}
+
 bool TranslElem::operator==(const TranslElem& other)
 {
     return _object_name_==other._object_name_;
@@ -33,9 +54,10 @@ bool TranslElem::operator!=(const TranslElem& other)
 }
 
 
+
 //#Translation Table Model:
 
-TranslationTableModel::TranslationTableModel(QObject *tata):QAbstractItemModel(tata)
+TranslationTableModel::TranslationTableModel(QObject *tata):QAbstractTableModel(tata)
 {
     return;
 }
@@ -57,8 +79,8 @@ bool TranslationTableModel::checkIndex(const QModelIndex& index) const
     return true;
 }
 
- void TranslationTableModel::changeLangName(const QString& old_name, const QString& new_name)
- {
+void TranslationTableModel::changeLangName(const QString& old_name, const QString& new_name)
+{
     bool del_mod = new_name.isEmpty();
     for(TranslElem& elem: _elements_)
     {
@@ -115,7 +137,12 @@ QVariant TranslationTableModel::data(const QModelIndex& index, int role) const
     }
     else
     {
-        if((index.column()==OBJECT_NAME_COLUMN)&&
+        if((index.column()==OBJECT_WINDOW_NAME)&&
+                (role==Qt::DisplayRole))
+        {
+            answer = _elements_.at(getLangDataRow(index))._window_name_;
+        }
+        else if((index.column()==OBJECT_NAME_COLUMN)&&
                 (role==Qt::DisplayRole))
         {
             answer = _elements_.at(getLangDataRow(index))._object_name_;
@@ -214,7 +241,7 @@ QVariant TranslationTableModel::headerData(int section, Qt::Orientation orientat
     }
     switch(orientation)
     {
-    case Qt::Horizontal:
+    case Qt::Vertical:
     {
         if(section == LANGUAGE_ROW)
         {
@@ -226,7 +253,7 @@ QVariant TranslationTableModel::headerData(int section, Qt::Orientation orientat
         }
     }
         break;
-    case Qt::Vertical:
+    case Qt::Horizontal:
     {
         switch(section)
         {
@@ -317,7 +344,7 @@ bool TranslationTableModel::removeColumns(int column, int count, const QModelInd
     return true;
 }
 
-const QList<TranslElem>& TranslationTableModel::getElements() const
+const QList<TranslElem> &TranslationTableModel::getElements() const
 {
     return _elements_;
 }
@@ -326,12 +353,17 @@ const QList<QString>& TranslationTableModel::getLanguages() const
 {
     return _languages_;
 }
-
-bool TranslationTableModel::loadElements(QList<TranslElem>& elements,
+const QSet<QString>& TranslationTableModel::getWindows() const
+{
+    return _windows_;
+}
+bool TranslationTableModel::loadElements(QList<TranslElem> &elements,
+                                         QSet<QString> &windows,
                                          QList<QString>& languages)
 {
     beginResetModel();
     _elements_ = std::move(elements);
+    _windows_   = std::move(windows);
     _languages_ = std::move(languages);
     endResetModel();
     return true;
