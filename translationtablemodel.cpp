@@ -257,6 +257,11 @@ QVariant TranslationTableModel::headerData(int section, Qt::Orientation orientat
     {
         switch(section)
         {
+        case OBJECT_WINDOW_NAME:
+        {
+            answer = "Window";
+        }
+            break;
         case OBJECT_NAME_COLUMN:
         {
             answer = "Name";

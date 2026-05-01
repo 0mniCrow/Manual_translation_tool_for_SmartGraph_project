@@ -68,6 +68,7 @@ void MainWindow::saveProject()
     {
         return;
     }
+    ui->line_save->setText(addr);
     TranslationXMLParser::saveProject(addr,_model_->getElements(),
                                       _model_->getLanguages(),
                                       _model_->getWindows());
