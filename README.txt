@@ -25,20 +25,20 @@ the list of available languages in the main application.
 
 The structure of the XML File:
 
-<translation>				#root elements
---<window name="window_name">		#the first window. Attribute - object name of the window
---|--<object>				#element of the first window
---|--|--<name> object_name			#object name of the element
---|--|--<type> class_name			#class name of the element
---|--|--<translations>			#list of translations
+<translation>								#root elements
+--<window name="window_name">				#the first window. Attribute - object name of the window
+--|--<object>								#element of the first window
+--|--|--<name> object_name					#object name of the element
+--|--|--<type> class_name					#class name of the element
+--|--|--<translations>						#list of translations
 --|--|--|--<language_name1>translation1		#the first translation. Tag name is the name of the language!
 --|--|--|--<language_name2>translation2		#the second translation.
 --|--|--|.....
---|--<object>				#next element of the first window
+--|--<object>								#next element of the first window
 --|--|.....
---<window name="window_name2">		#next window
+--<window name="window_name2">				#next window
 --|......
---<languages>				#languages list
---|--<language> language_name1		#the first language
---|--<language> language_name2		#the second language
+--<languages>								#languages list
+--|--<language> language_name1				#the first language
+--|--<language> language_name2				#the second language
 --|.....
